@@ -31,6 +31,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Start compose
         run: docker compose up --wait --wait-timeout 180
+      - name: Compose ready
+        run: docker compose ps
       - name: Install librdkafka
         run: |
           sudo apt-get update

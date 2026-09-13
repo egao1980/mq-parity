@@ -1,0 +1,53 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  SBCL_VERSION: 2.6.7
+  ROSWELL_VERSION: "26.02.116"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    uses: egao1980/cl-repository/.github/workflows/test-system.yml@main
+
+  parity-live:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      PARITY: "1"
+      MQ_PARITY: "1"
+      MQ_PARITY_HOST: "127.0.0.1"
+      MQ_PARITY_PORT: "5672"
+      MQ_PARITY_KAFKA_BOOTSTRAP: "127.0.0.1:19092"
+    steps:
+      - uses: actions/checkout@v5
+      - name: Start compose
+        run: docker compose up --wait --wait-timeout 180
+      - name: Install librdkafka
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librdkafka-dev
+      - uses: egao1980/cl-repository/.github/actions/setup-lisp@main
+        with:
+          sbcl-version: ${{ env.SBCL_VERSION }}
+          roswell-version: ${{ env.ROSWELL_VERSION }}
+      - uses: egao1980/cl-repository/.github/actions/ci@main
+        with:
+          phase: install
+      - uses: egao1980/cl-repository/.github/actions/ci@main
+        with:
+          phase: test
+      - name: Compose logs
+        if: failure()
+        run: docker compose logs
+      - name: Compose down
+        if: always()
+        run: docker compose down -v

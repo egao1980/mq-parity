@@ -16,11 +16,10 @@
            #:make-live-kafka-backend
            #:destroy-live-kafka-backend
            #:call-with-live-kafka
-           #:kafka-create-topic
            #:kafka-produce-consume-canary
            #:kafka-nack-redelivery-canary
-           #:plain-sasl-response
-           #:call-with-amqp-connection
+           #:kafka-group-resume-canary
+           #:call-with-amqp-backend
            #:amqp-publish-consume
            #:print-matrix))
 

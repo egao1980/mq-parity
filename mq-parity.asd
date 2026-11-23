@@ -1,12 +1,11 @@
 (defsystem "mq-parity"
-  :version "0.1.0"
+  :version "0.2.0"
   :description "Interop canary: mq-protocol AMQP vs RabbitMQ and Kafka vs Redpanda"
   :author "egao1980"
   :license "MIT"
   :depends-on ("mq-protocol"
-               "mq-backend-amqp"
-               "mq-backend-kafka"
-               "cffi"
+               (:version "mq-backend-amqp" "0.2.0")
+               (:version "mq-backend-kafka" "0.2.0")
                "usocket"
                "uiop")
   :serial t

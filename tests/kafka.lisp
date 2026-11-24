@@ -65,3 +65,13 @@
           (ok (string= "mq-parity"
                        (%header (mq-protocol:mq-message-headers second) "canary")))
           (ok (mq-protocol:mq-message-redelivered-p second))))))
+
+(deftest kafka-group-resumes-after-ack
+  (multiple-value-bind (run-p reason)
+      (kafka-live-ready-p)
+    (if (not run-p)
+        (skip reason)
+        (let ((result (kafka-group-resume-canary)))
+          (ok (equal "g1" (getf result :first)) "the first member gets g1 and acks it")
+          (ok (equal "g2" (getf result :second))
+              "the second member of the group resumes at g2 (the ack committed g1)")))))

@@ -5,7 +5,7 @@
   :license "MIT"
   :depends-on ("mq-protocol"
                (:version "mq-backend-amqp" "0.2.0")
-               (:version "mq-backend-kafka" "0.2.0")
+               (:version "mq-backend-kafka" "0.2.1")
                "usocket"
                "uiop")
   :serial t

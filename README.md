@@ -1,28 +1,28 @@
 # mq-parity
 
-Interop canary: **[`mq-protocol`](https://github.com/egao1980/mq-protocol)** + **[`mq-backend-amqp`](https://github.com/egao1980/mq-backend-amqp)** vs dockerized **RabbitMQ**, and **[`mq-backend-kafka`](https://github.com/egao1980/mq-backend-kafka)** vs dockerized **Redpanda**. Both canaries go through the backends' own transports: mq-backend-amqp 0.2.0 connects and handshakes itself (`with-amqp-backend`), and mq-backend-kafka 0.2.0 ships librdkafka as a native overlay with its CFFI driver.
+Interop canary: **[`mq-protocol`](https://github.com/egao1980/mq-protocol)** + **[`mq-backend-amqp`](https://github.com/egao1980/mq-backend-amqp)** vs dockerized **RabbitMQ**, and **[`mq-backend-kafka`](https://github.com/egao1980/mq-backend-kafka)** vs dockerized **Redpanda**. Both canaries go through the backends' own transports: mq-backend-amqp 0.2.0 connects and handshakes itself (`with-amqp-backend`), and mq-backend-kafka 0.2.1 ships librdkafka as a native overlay with its CFFI driver.
 
 Protocol unit tests stay in the protocol/backend repos (in-memory / octet-pipe). This repo is **live interop** only.
 
 ## Run
 
-Default `asdf:test-system` is green **without Docker** — live cases `skip` when the daemon is unreachable.
+Default `cl-repo test` is green **without Docker** — live cases `skip` when the daemon is unreachable.
 
 ```bash
-ros -e '(asdf:test-system "mq-parity")' -q
+cl-repo test
 ```
 
 Live AMQP + Kafka:
 
 ```bash
 docker compose up --wait
-ros -e '(asdf:test-system "mq-parity")' -q
+cl-repo test
 ```
 
 Force skip even if brokers are up:
 
 ```bash
-PARITY=0 ros -e '(asdf:test-system "mq-parity")' -q
+PARITY=0 cl-repo test
 ```
 
 ## Kafka / Redpanda
